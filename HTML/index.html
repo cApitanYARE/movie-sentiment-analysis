@@ -1,0 +1,110 @@
+<html>
+    <head>
+        <title>
+            Sentiment analysis
+        </title>
+        <style>
+            body{
+                background-color:#18181A;
+                color: #E4E4E7;
+                font-family: Arial, sans-serif;
+                zoom: 2.5;
+                font-size: 18px;
+            }
+
+            .center{
+                text-align:center;
+                margin-top:8%;
+            }
+
+            .areatext {
+                margin-top: 10px;
+                border: 1px solid #2E2E33;
+                background-color: #232326;
+                color: #E4E4E7;
+                padding: 10px;
+                border-radius: 8px;
+                font-size: 16px;
+                width: 100%;
+                max-width: 600px;
+                resize: vertical;
+            }
+
+            .areatext:hover {
+                border-color: #3A3A3F;
+                box-shadow: 0 0 10px rgba(161, 161, 170, 0.15);
+            }
+
+            .areatext:focus {
+                outline: none;
+                border-color: #A1A1AA;
+                box-shadow: 0 0 20px rgba(161, 161, 170, 0.35);
+            }
+
+            button {
+                background-color: #3A3A3F;
+                color: #E4E4E7;
+                border: 1px solid #2E2E33;
+                padding: 8px 16px;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 16px;
+            }
+
+            button:hover {
+                background-color: #4B4B50;
+                border-color: #3A3A3F;
+                box-shadow: 0 0 10px rgba(161, 161, 170, 0.25); /* subtle glow */
+            }
+
+            button:active {
+                background-color: #5C5C61;
+                border-color: #5C5C61;
+            }
+
+            #result {
+                margin-top: 20px;
+                font-size: 20px;
+                font-weight: bold;
+                transition: color 0.3s;
+            }
+            .positive {
+                color: #22C55E;
+            }
+            .negative {
+                color: #EF4444;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="center">
+            <h2 class="center">Write your reviews below</h2>
+            <textarea id="text" rows="4" cols="50" class="areatext"></textarea><br><br>
+            <button onclick="analyze()">Check Mood</button>
+            <h3 id="result"></h3>
+        </div>
+
+        <script>
+            async function analyze() {
+                const text = document.getElementById("text").value;
+                const response = await fetch("http://127.0.0.1:8000/predict", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({text: text})
+                });
+                const data = await response.json();
+                const resultEl = document.getElementById("result");
+                resultEl.innerText = "Sentiment: " + data.sentiment +'\n'+ "Score: " + data.score.toFixed(2);
+
+                resultEl.classList.remove("positive", "negative");
+
+                if(data.sentiment.toLowerCase() === "positive"){
+                    resultEl.classList.add("positive");
+                } else{
+                    resultEl.classList.add("negative");
+                }
+            }
+        </script>
+    </body>
+</html>
