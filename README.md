@@ -1,5 +1,5 @@
 <h1>Sentiment analysis</h1>
-I decided to find out more about neural networks and train a model for sentiment analysis based on IMDB reviews(https://www.kaggle.com/datasets/yasserh/imdb-movie-ratings-sentiment-analysis).
+I decided to find out more about neural networks and train a model for sentiment analysis based on IMDB reviews (https://www.kaggle.com/datasets/yasserh/imdb-movie-ratings-sentiment-analysis).
 
 For this task, I chose a Sequential neural network, which works well for this type of problem. 
 
