@@ -7,6 +7,7 @@ import uvicorn
 
 import numpy as np
 
+import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 import re
@@ -24,10 +25,15 @@ app.add_middleware(
 )
 
 
-model = tf.keras.models.load_model('./Model/sentiment_model.keras')
-tokenizer = joblib.load("./Model/tokenizer.joblib")
+model = tf.keras.models.load_model('Model/sentiment_model.keras')
+tokenizer = joblib.load("Model/tokenizer.joblib")
+
+nltk.download('punkt')
+nltk.download('punkt_tab')
+nltk.download('stopwords')
 
 stop_words = set(stopwords.words('english'))
+
 def clean_text(t):
     text = t.lower()
     text = re.sub(r'<[^>]+>', '', text)
@@ -74,5 +80,5 @@ def predict(data: inputData):
         "sentiment": sentiment,
     }
 
-if __name__ == "__main__":
-    uvicorn.run("api:app", host="127.0.0.1", port=8000, reload=True)
+#if __name__ == "__main__":
+#    uvicorn.run("api:app", host="127.0.0.1", port=8000, reload=True)
