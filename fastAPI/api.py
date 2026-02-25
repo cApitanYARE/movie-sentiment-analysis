@@ -2,7 +2,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel, Field, field_validator
 import tflite_runtime.interpreter as tflite
-import joblib
 import uvicorn
 
 import numpy as np
@@ -16,6 +15,18 @@ import json
 
 from fastapi.middleware.cors import CORSMiddleware
 
+for resource in ['stopwords', 'punkt', 'punkt_tab']:
+    try:
+        nltk.data.find(f'corpora/{resource}')
+    except LookupError:
+        nltk.download(resource, quiet=True)
+
+from nltk.corpus import stopwords
+
+stop_words = set(stopwords.words('english'))
+
+stop_words = set(stopwords.words('english'))
+
 app = FastAPI()
 
 app.add_middleware(
@@ -25,6 +36,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 interpreter = tflite.Interpreter(model_path="Model/sentiment_model.tflite")
 interpreter.allocate_tensors()
