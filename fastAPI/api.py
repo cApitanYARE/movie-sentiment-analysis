@@ -21,22 +21,18 @@ for resource in ['stopwords', 'punkt', 'punkt_tab']:
     except LookupError:
         nltk.download(resource, quiet=True)
 
-from nltk.corpus import stopwords
-
 stop_words = set(stopwords.words('english'))
-
 stop_words = set(stopwords.words('english'))
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://movie-sentiment-analysis-f2as.onrender.com/"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 interpreter = tflite.Interpreter(model_path="Model/sentiment_model.tflite")
 interpreter.allocate_tensors()
@@ -60,7 +56,6 @@ def clean_text(t):
     text = re.sub(r'\S+@\S+', '', text)
     text = re.sub(r'-', ' ', text)
     text = re.sub(r'[^a-z\s]', '', text)
-
     text = ' '.join(word for word in word_tokenize(text) if word not in stop_words)
 
     return text
